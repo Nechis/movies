@@ -9,12 +9,23 @@
 import SwiftUI
 
 struct MainView: View {
+
+    @State private var selection = 0
+
     var body: some View {
-        TabView {
-            ContentView(viewModel: .init())
+        TabView(){
+            ContentView(viewModel: .init(), category: ContentView.Category.popular)
                 .tabItem {
                 Text("Popular")
-            }
+            }.tag(0)
+            ContentView(viewModel: .init(), category: ContentView.Category.topRanked)
+                .tabItem {
+                Text("Top Rated")
+            }.tag(1)
+            ContentView(viewModel: .init(), category: ContentView.Category.upcomming)
+                .tabItem {
+                Text("Upcoming")
+            }.tag(2)
         }
     }
 }

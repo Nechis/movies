@@ -16,24 +16,23 @@ public class MovieViewModel: ObservableObject {
 
     private let movieServices: MovieServices
     
-    /*enum Input {
-        case onAppear
-    }*/
-    
-  /*  func apply (_ input: Input){
-        switch input {
-        case .onAppear:
-            onAppearSubject.send(())
-        }
-    }*/
-    
-   // private let onAppearSubject = PassthroughSubject<Void, Never>
-    
+ 
     init(movieServices: MovieServices = MovieServices()){
         self.movieServices = movieServices
         getPopularMovies()
         getTopRankedMovies()
         getUpcomingMovies()
+    }
+    
+    func getMovies(category : ContentView.Category) -> [Movie]{
+        switch category {
+        case ContentView.Category.popular:
+            return popularMovies
+        case ContentView.Category.topRanked:
+            return topRankedMovies
+        case ContentView.Category.upcomming:
+            return upcomingMovies
+        }
     }
     
     func getPopularMovies(){

@@ -10,49 +10,29 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var viewModel: MovieViewModel
+    var category: Category
     
-    @State private var selection = 0
-     
+    enum Category {
+        case popular
+        case topRanked
+        case upcomming
+    }
+    
     var body: some View {
         NavigationView {
-         //   TabView(selection: $selection){
                 List() {
-                    ForEach(viewModel.popularMovies){ movie in
+                    ForEach(viewModel.getMovies(category: category)){ movie in
                         MovieItemView(movieItem: movie)
                     }
                 }
-                /*.tabItem {
-                    VStack {
-                        Text("Popular")
-                    }
-                }
-                .tag(0)
-                Text("Top Rated")
-                    .font(.title)
-                    .tabItem {
-                        VStack {
-                            Text("Second")
-                        }
-                    }
-                    .tag(1)
-                Text("Upcoming")
-                .font(.title)
-                .tabItem {
-                    VStack {
-                        Text("Upcoming")
-                    }
-                }
-                .tag(2)
-            }*/
             .navigationBarTitle("Movies")
             .listStyle(GroupedListStyle())
         }
-        //.onAppear(perform: {self.viewModel.apply(.onAppear)})
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(viewModel: .init())
+        ContentView(viewModel: .init(), category: ContentView.Category.popular)
     }
 }
