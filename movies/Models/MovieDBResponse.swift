@@ -8,7 +8,9 @@
 
 import Foundation
 
-struct MovieDBResponse {
+struct MovieDBResponse: Codable {
 
-    public let results: [Movie]
+    public var page: Int
+    public var total_results: Int
+    public var results: [Movie]
 }

@@ -12,22 +12,17 @@ struct ContentView: View {
     @ObservedObject var viewModel: MovieViewModel
     
     @State private var selection = 0
- 
-    let movies: [Movie] = [Movie(), Movie(), Movie()]
-    
+     
     var body: some View {
         NavigationView {
-            TabView(selection: $selection){
-                List(viewModel.movies){
-                    ForEach(movies){ movie in
-                        Section(header: Text(movie.id.uuidString)){
-                            MovieItemView(movieItem: movie)
-                        }
+         //   TabView(selection: $selection){
+                List() {
+                    ForEach(viewModel.popularMovies){ movie in
+                        MovieItemView(movieItem: movie)
                     }
                 }
-                .tabItem {
+                /*.tabItem {
                     VStack {
-                        Image("first")
                         Text("Popular")
                     }
                 }
@@ -36,7 +31,6 @@ struct ContentView: View {
                     .font(.title)
                     .tabItem {
                         VStack {
-                            Image("second")
                             Text("Second")
                         }
                     }
@@ -45,15 +39,15 @@ struct ContentView: View {
                 .font(.title)
                 .tabItem {
                     VStack {
-                        Image("second")
                         Text("Upcoming")
                     }
                 }
                 .tag(2)
-            }
+            }*/
             .navigationBarTitle("Movies")
             .listStyle(GroupedListStyle())
         }
+        //.onAppear(perform: {self.viewModel.apply(.onAppear)})
     }
 }
 

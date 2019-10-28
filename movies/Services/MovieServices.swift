@@ -28,15 +28,92 @@ class MovieServices {
     typealias GetMoviesResult = Result<MovieDBResponse, GetMoviesFailureReason>
     typealias GetMoviesCompletion = (_ result: GetMoviesResult) -> Void
    
-    func getMoviesV3(completion: @escaping GetMoviesCompletion) {
+    func getPopularMoviesV3(completion: @escaping GetMoviesCompletion) {
         let popularMoviesUrl = "\(domainV3)movie/popular?api_key=1f5d135f32a27896915244507699d125&language=en-US&page=1"
-        let topRankedMoviesUrl = "\(domainV3)movie/top_rated?api_key=1f5d135f32a27896915244507699d125&language=en-US&page=1"
-        let upcomingMoviesUrl = "\(domainV3)movie/upcoming?api_key=1f5d135f32a27896915244507699d125&language=en-US&page=1"
         AF.request(popularMoviesUrl,
                    method: .get,
+                   encoding: JSONEncoding.default,
                    headers: headers)
             .responseJSON { response in
-                debugPrint(response)
+                switch response.result {
+                case .success:
+                    do{
+                        guard let data = response.data else {
+                            completion(.failure(GetMoviesFailureReason.notFound))
+                            return
+                        }
+
+                        let movieDBresponse = try JSONDecoder().decode(MovieDBResponse.self, from: data)
+                        completion(.success(movieDBresponse))
+                    } catch {
+                        completion(.failure(GetMoviesFailureReason.notFound))
+                    }
+                case .failure(_):
+                    if let statusCode = response.response?.statusCode,
+                        let reason = GetMoviesFailureReason(rawValue: statusCode) {
+                        completion(.failure(reason))
+                    }
+                }
+        }
+    
+    }
+    
+    func getTopRankedMoviesV3(completion: @escaping GetMoviesCompletion) {
+        let topRankedMoviesUrl = "\(domainV3)movie/top_rated?api_key=1f5d135f32a27896915244507699d125&language=en-US&page=1"
+        AF.request(topRankedMoviesUrl,
+                   method: .get,
+                   encoding: JSONEncoding.default,
+                   headers: headers)
+            .responseJSON { response in
+                switch response.result {
+                case .success:
+                    do{
+                        guard let data = response.data else {
+                            completion(.failure(GetMoviesFailureReason.notFound))
+                            return
+                        }
+                        
+                        let movieDBresponse = try JSONDecoder().decode(MovieDBResponse.self, from: data)
+                        completion(.success(movieDBresponse))
+                    } catch {
+                        completion(.failure(GetMoviesFailureReason.notFound))
+                    }
+                case .failure(_):
+                    if let statusCode = response.response?.statusCode,
+                        let reason = GetMoviesFailureReason(rawValue: statusCode) {
+                        completion(.failure(reason))
+                    }
+                }
+        }
+    
+    }
+    
+    func getUpcomingMoviesV3(completion: @escaping GetMoviesCompletion) {
+        let upcomingMoviesUrl = "\(domainV3)movie/upcoming?api_key=1f5d135f32a27896915244507699d125&language=en-US&page=1"
+        AF.request(upcomingMoviesUrl,
+                   method: .get,
+                   encoding: JSONEncoding.default,
+                   headers: headers)
+            .responseJSON { response in
+                switch response.result {
+                case .success:
+                    do{
+                        guard let data = response.data else {
+                            completion(.failure(GetMoviesFailureReason.notFound))
+                            return
+                        }
+
+                        let movieDBresponse = try JSONDecoder().decode(MovieDBResponse.self, from: data)
+                        completion(.success(movieDBresponse))
+                    } catch {
+                        completion(.failure(GetMoviesFailureReason.notFound))
+                    }
+                case .failure(_):
+                    if let statusCode = response.response?.statusCode,
+                        let reason = GetMoviesFailureReason(rawValue: statusCode) {
+                        completion(.failure(reason))
+                    }
+                }
         }
     
     }

@@ -9,16 +9,22 @@
 import SwiftUI
 
 struct MovieItemView: View {
+    
     var movieItem: Movie
+    
     var body: some View {
-        HStack{
-            Image("first")
-                .clipShape(Circle())
-                .overlay(Circle().stroke(Color.gray, lineWidth: 2))
-            VStack(alignment: .leading) {
-                Text(movieItem.id.uuidString)
-                Text(movieItem.title).font(.headline)
-                Text(movieItem.original_title)
+        NavigationLink(destination:MoviewDetailView(movie: movieItem)) {
+            HStack{
+                URLImage(url: movieItem.posterUrl())
+                    .frame(width: 50, height: 50)
+                    .scaledToFit()
+                VStack(alignment: .leading) {
+                    Text(movieItem.title).font(.headline)
+                    Text(movieItem.overview)
+                        .lineLimit(2)
+                }.layoutPriority(1)
+                
+                Spacer()
             }
         }
     }
